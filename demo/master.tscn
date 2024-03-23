@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4ml6l08wdux3"]
+
+[ext_resource type="Texture2D" uid="uid://cqexyvu6f6s6t" path="res://icon.svg" id="1_483ie"]
+
+[node name="Master" type="Node"]
