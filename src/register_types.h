@@ -3,10 +3,9 @@
 
 #include <godot_cpp/core/class_db.hpp>
 
-namespace godot{
+using namespace godot;
 
 void initialise_danmaku_engine(ModuleInitializationLevel p_level);
 void uninitialise_danmaku_engine(ModuleInitializationLevel p_level);
-}
 
 #endif

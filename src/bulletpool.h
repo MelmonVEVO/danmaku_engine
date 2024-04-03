@@ -30,12 +30,10 @@ class BulletPool : public Node {
 
 
 private:
-    uint32_t current_pool_size;
-    Bullet2D* bullet_pool = NULL;
+    uint32_t pool_size;
+    Bullet2D* pool;
 
-    int get_idx;
-    int return_idx;
-
+    Bullet2D* first_available;  // unused bullet
 
 protected:
     static void _bind_methods();
@@ -45,13 +43,13 @@ public:
     BulletPool();
     ~BulletPool();
 
-    void initialise_pool(uint32_t pool_size=-1);
+    void initialise_pool(uint32_t p_pool_size=-1);
     void _ready() override;
     Bullet2D* get_bullet();
     void return_bullet(Bullet2D* bullet);
-
-    void set_current_pool_size(uint32_t p_pool_size);
-    uint32_t get_current_pool_size() const { return current_pool_size; }
+    
+    void set_pool_size(uint32_t p_pool_size) { pool_size = p_pool_size; }
+    uint32_t get_pool_size() const { return pool_size; }
 };
 }
 
