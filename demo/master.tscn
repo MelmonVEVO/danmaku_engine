@@ -1,12 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://c4ml6l08wdux3"]
+[gd_scene load_steps=4 format=3 uid="uid://c4ml6l08wdux3"]
 
 [ext_resource type="Script" path="res://master.gd" id="1_1fxad"]
+[ext_resource type="Texture2D" uid="uid://o4x6bg707ll7" path="res://sprites/platformPack_item001.png" id="2_3un8u"]
+
+[sub_resource type="BulletSettings" id="BulletSettings_mcp3f"]
+bullet_texture = ExtResource("2_3un8u")
+initial_speed = 200.0
+phys_layer = 1
+ttl = 3.0
 
 [node name="Master" type="Node"]
 script = ExtResource("1_1fxad")
 
 [node name="BulletPool" type="BulletPool" parent="."]
-pool_size = 10000
+pool_size = 1000
 
 [node name="FPSLabel" type="Label" parent="."]
 offset_right = 40.0
@@ -19,5 +26,10 @@ offset_right = 40.0
 offset_bottom = 51.0
 text = "0"
 
-[node name="Emitter2D" type="Emitter2D" parent="."]
+[node name="Emitter2D" type="Emitter2D" parent="." node_paths=PackedStringArray("bullet_pool_to_use")]
+bullet_settings = SubResource("BulletSettings_mcp3f")
+bullet_pool_to_use = NodePath("../BulletPool")
+bullets_per_volley = 30
 spawn_on_start = true
+spawn_rate = 2.0
+position = Vector2(586, 176)

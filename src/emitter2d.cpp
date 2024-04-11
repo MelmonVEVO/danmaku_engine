@@ -18,17 +18,12 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
 
-// Debug includes
-#include <godot_cpp/variant/utility_functions.hpp>
-
 #include "emitter2d.h"
 
 using namespace godot;
 
 
 void Emitter2D::_bind_methods() {
-    
-
     ClassDB::bind_method(D_METHOD("get_settings"), &Emitter2D::get_settings);
     ClassDB::bind_method(D_METHOD("set_settings", "p_settings"), &Emitter2D::set_settings);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "bullet_settings", PROPERTY_HINT_RESOURCE_TYPE, "BulletSettings"), "set_settings", "get_settings");
@@ -88,28 +83,29 @@ Emitter2D::~Emitter2D() {
 
 
 void Emitter2D::_ready() {
-    // if (!Engine::get_singleton()->is_editor_hint()) {
-    //     spawning = spawn_on_start;
-    //     time_to_wait = 1 / get_spawn_rate();
-    //     current_timer = time_to_wait;
-    //     angle_per_bullet = (2 * Math_PI) / get_bullets_per_volley();
-    // }
+    if (!Engine::get_singleton()->is_editor_hint()) {
+        spawning = spawn_on_start;
+        time_to_wait = 1 / get_spawn_rate();
+        current_timer = time_to_wait;
+        angle_per_bullet = (2 * Math_PI) / get_bullets_per_volley();
+    }
 }
 
 
 void Emitter2D::_process(double delta) {
-    // if (spawning) {
-    //     UtilityFunctions::print("spawn");
-    //     current_timer = current_timer - delta;
-    //     if (current_timer <= 0) {
-    //         current_timer = time_to_wait;
-    //         for (uint32_t i = 0; i < bullets_per_volley; i++) {
-    //             double bullet_angle = angle_per_bullet * i;
-    //             Bullet2D* bullet = usable_pool->get_bullet();
-    //             if (bullet != nullptr) {  // pool returns nullptr if no bullets left.
-    //                 bullet->start(get_settings(), bullet_angle, get_position(), usable_pool->get_bullet_shape(), this);
-    //             }
-    //         }
-    //     }
-    // }
+    if (!Engine::get_singleton()->is_editor_hint()) {
+        if (spawning) {
+            current_timer = current_timer - delta;
+            if (current_timer <= 0) {
+                current_timer = time_to_wait;
+                for (uint32_t i = 0; i < bullets_per_volley; i++) {
+                    double bullet_angle = angle_per_bullet * i;
+                    Bullet2D* bullet = usable_pool->get_bullet();
+                    if (bullet != nullptr) {  // pool returns nullptr if no bullets left.
+                        bullet->start(get_settings(), bullet_angle, get_position(), usable_pool->get_bullet_shape(), this);
+                    }
+                }
+            }
+        }
+    }
 }

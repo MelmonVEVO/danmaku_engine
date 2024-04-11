@@ -113,23 +113,23 @@ void Bullet2D::start(Ref<BulletSettings> settings, double angle, Vector2 init_po
 
 // Makes the bullet emit the cleared signal, then stands by.
 void Bullet2D::clear() {
-    // emit_signal("cleared");
-    // standby();
+    emit_signal("cleared");
+    standby();
 }
 
 
 // This makes the bullet return to the bullet pool and stands by.
 // Mostly used by itself if a bullet times out. clear() may be more appropriate for manually clearing bullets.
 void Bullet2D::standby() {
-    // PhysicsServer2D* server = PhysicsServer2D::get_singleton();
+    PhysicsServer2D* server = PhysicsServer2D::get_singleton();
 
-    // emit_signal("standby", this);
-    // server->body_set_shape_disabled(physics_body, 0, true);
-    // set_physics_process(false);
-    // hide();
-    // if (current_owner != nullptr && current_owner->has_signal("clear_owned_bullets")) {
-    //     current_owner->disconnect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));
-    // }
+    emit_signal("standby", this);
+    server->body_set_shape_disabled(physics_body, 0, true);
+    set_physics_process(false);
+    hide();
+    if (current_owner != nullptr && current_owner->has_signal("clear_owned_bullets")) {
+        current_owner->disconnect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));
+    }
 }
 
 

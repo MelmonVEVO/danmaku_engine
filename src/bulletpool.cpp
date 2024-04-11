@@ -73,7 +73,7 @@ void BulletPool::initialise_pool() {
     for (int32_t i = 0; i < get_pool_size(); i++) {
         memnew_placement(&pool[i], Bullet2D);
         add_child(&pool[i]);
-        //pool[i].connect("standby", callable_mp(this, &BulletPool::return_bullet));
+        pool[i].connect("standby", callable_mp(this, &BulletPool::return_bullet));
     }
 
     first_available = pool;  // set up the free list of available bullets
