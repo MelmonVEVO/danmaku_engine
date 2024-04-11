@@ -1,8 +1,9 @@
 #include "register_types.h"
 
-//#include "bullet2d.h"
+#include "bullet2d.h"
 #include "bulletpool.h"
-#include "temp.h"
+#include "emitter2d.h"
+#include "bulletsettings.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -16,9 +17,10 @@ void initialise_danmaku_engine(ModuleInitializationLevel p_level) {
         return;
     }
 
-    //ClassDB::register_class<Bullet2D>();
+    ClassDB::register_class<BulletSettings>();
+    ClassDB::register_class<Bullet2D>();
     ClassDB::register_class<BulletPool>();
-    //ClassDB::register_class<GDExample>();
+    ClassDB::register_class<Emitter2D>();
 }
 
 
