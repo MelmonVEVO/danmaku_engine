@@ -6,9 +6,9 @@
 /*                                                 */
 /* Copyright (c) 2024-present MELMON PROJECT.      */
 /*                                                 */
-/* Danmaku Engine is released under the GNU GPL    */
-/* Public Licence v3.0. You should have received a */
-/* copy of the licence with the source code.       */
+/* Danmaku Engine is released under the MIT        */
+/* Licence You should have received a copy of the  */
+/* licence with the source code.                   */
 /*                                                 */
 /* THIS SOFTWARE IS PROVIDED "AS IS" WITH NO       */
 /* WARRANTY OF ANY KIND. FOR DETAILS, CHECK THE    */
@@ -16,7 +16,6 @@
 /***************************************************/
 
 #include <godot_cpp/core/class_db.hpp>
-#include <godot_cpp/classes/physics_server2d.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <assert.h>
 
@@ -49,8 +48,6 @@ BulletPool::~BulletPool() {
         }
         memdelete_arr(pool);
     }
-
-    PhysicsServer2D::get_singleton()->free_rid(bullet_shape);
 }
 
 
@@ -58,10 +55,6 @@ void BulletPool::_ready() {
     set_process(false);
     set_physics_process(false);
     if (!Engine::get_singleton()->is_editor_hint()) {  // make sure _ready only runs in game
-        PhysicsServer2D* server = PhysicsServer2D::get_singleton();
-        bullet_shape = server->circle_shape_create();
-        server->shape_set_data(bullet_shape, 2);
-
         initialise_pool();
     }
 }

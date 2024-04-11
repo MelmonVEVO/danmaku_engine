@@ -6,9 +6,9 @@
 /*                                                 */
 /* Copyright (c) 2024-present MELMON PROJECT.      */
 /*                                                 */
-/* Danmaku Engine is released under the GNU GPL    */
-/* Public Licence v3.0. You should have received a */
-/* copy of the licence with the source code.       */
+/* Danmaku Engine is released under the MIT        */
+/* Licence You should have received a copy of the  */
+/* licence with the source code.                   */
 /*                                                 */
 /* THIS SOFTWARE IS PROVIDED "AS IS" WITH NO       */
 /* WARRANTY OF ANY KIND. FOR DETAILS, CHECK THE    */
@@ -102,7 +102,7 @@ void Emitter2D::_process(double delta) {
                     double bullet_angle = angle_per_bullet * i;
                     Bullet2D* bullet = usable_pool->get_bullet();
                     if (bullet != nullptr) {  // pool returns nullptr if no bullets left.
-                        bullet->start(get_settings(), bullet_angle, get_position(), usable_pool->get_bullet_shape(), this);
+                        bullet->start(get_settings(), bullet_angle, get_position(), this);
                     }
                 }
             }

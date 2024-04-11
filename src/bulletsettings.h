@@ -6,9 +6,9 @@
 /*                                                 */
 /* Copyright (c) 2024-present MELMON PROJECT.      */
 /*                                                 */
-/* Danmaku Engine is released under the GNU GPL    */
-/* Public Licence v3.0. You should have received a */
-/* copy of the licence with the source code.       */
+/* Danmaku Engine is released under the MIT        */
+/* Licence You should have received a copy of the  */
+/* licence with the source code.                   */
 /*                                                 */
 /* THIS SOFTWARE IS PROVIDED "AS IS" WITH NO       */
 /* WARRANTY OF ANY KIND. FOR DETAILS, CHECK THE    */
@@ -34,6 +34,9 @@ private:
     real_t ang_vel;
     uint32_t phys_layer;
     real_t ttl;
+    uint32_t radius;
+
+    RID bullet_shape;
 
 protected:
     static void _bind_methods();
@@ -56,6 +59,11 @@ public:
 
     void set_ttl(real_t p_ttl) { ttl = p_ttl; };
     real_t get_ttl() const { return ttl; };
+
+    void set_radius(uint32_t p_radius) { radius = p_radius; };
+    uint32_t get_radius() const { return radius; };
+
+    RID get_bullet_shape_rid();
 };
 
 }

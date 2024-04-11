@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="BulletPool" inherits="Node" version="3.6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+    <brief_description>
+        Provides an interface to create and shoot performant bullets.
+    </brief_description>
+    <description>
+        BulletPool pools a certain number of [Bullet2D] nodes to be used either by [Emitter2D] nodes, or can be used in code to get a bullet.
+        For example:
+
+        [codeblock]
+        var bullet: Bullet2D = pool.get_bullet()
+        bullet.start(/* whatever you need */)
+        [/codeblock]
+
+        The bullet will then return itself once it times out.
+    </description>
+    <tutorials>
+    </tutorials>
+    <methods>
+        <method name="get_current_bullets">
+            <return type="int" />
+            <description>
+                Provides the number of currently active bullets.
+            </description>
+        </method>
+    </methods>
+    <signals>
+        <signal name="clear_all_bullets">
+            <description>
+                Emitted when the bullet pool wishes to return every active bullet back to the pool.
+            </description>
+        </signal>
+    </signals>
+</class>

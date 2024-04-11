@@ -1,13 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4ml6l08wdux3"]
+[gd_scene load_steps=5 format=3 uid="uid://c4ml6l08wdux3"]
 
 [ext_resource type="Script" path="res://master.gd" id="1_1fxad"]
 [ext_resource type="Texture2D" uid="uid://o4x6bg707ll7" path="res://sprites/platformPack_item001.png" id="2_3un8u"]
+[ext_resource type="PackedScene" uid="uid://bh355c0dlnam3" path="res://player.tscn" id="3_cyqag"]
 
 [sub_resource type="BulletSettings" id="BulletSettings_mcp3f"]
 bullet_texture = ExtResource("2_3un8u")
 initial_speed = 200.0
-phys_layer = 1
-ttl = 3.0
+acceleration = 9.58488e-43
+angular_velocity = 0.0
+physics_layer = 1
+ttl = 5.0
+bullet_hitbox_radius = 4
 
 [node name="Master" type="Node"]
 script = ExtResource("1_1fxad")
@@ -33,3 +37,6 @@ bullets_per_volley = 30
 spawn_on_start = true
 spawn_rate = 2.0
 position = Vector2(586, 176)
+
+[node name="Player" parent="." instance=ExtResource("3_cyqag")]
+position = Vector2(587, 557)

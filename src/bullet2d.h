@@ -6,9 +6,9 @@
 /*                                                 */
 /* Copyright (c) 2024-present MELMON PROJECT.      */
 /*                                                 */
-/* Danmaku Engine is released under the GNU GPL    */
-/* Public Licence v3.0. You should have received a */
-/* copy of the licence with the source code.       */
+/* Danmaku Engine is released under the MIT        */
+/* Licence You should have received a copy of the  */
+/* licence with the source code.                   */
 /*                                                 */
 /* THIS SOFTWARE IS PROVIDED "AS IS" WITH NO       */
 /* WARRANTY OF ANY KIND. FOR DETAILS, CHECK THE    */
@@ -52,7 +52,7 @@ public:
     void _ready() override;
     void _physics_process(double delta) override;
     void clear();
-    void start(Ref<BulletSettings> settings, double angle, Vector2 init_position, RID shape, Node* owner=nullptr);
+    void start(Ref<BulletSettings> settings, double angle, Vector2 init_position, Node* owner=nullptr);
     void set_bullet_shape(RID shape);
     void standby();
 

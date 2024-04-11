@@ -6,9 +6,9 @@
 /*                                                 */
 /* Copyright (c) 2024-present MELMON PROJECT.      */
 /*                                                 */
-/* Danmaku Engine is released under the GNU GPL    */
-/* Public Licence v3.0. You should have received a */
-/* copy of the licence with the source code.       */
+/* Danmaku Engine is released under the MIT        */
+/* Licence You should have received a copy of the  */
+/* licence with the source code.                   */
 /*                                                 */
 /* THIS SOFTWARE IS PROVIDED "AS IS" WITH NO       */
 /* WARRANTY OF ANY KIND. FOR DETAILS, CHECK THE    */
@@ -79,7 +79,7 @@ void Bullet2D::_physics_process(double delta) {  // maybe multithread this if pe
 
 
 // Starts the processing of the bullet.
-void Bullet2D::start(Ref<BulletSettings> settings, double angle, Vector2 init_position, RID shape, Node* owner) {
+void Bullet2D::start(Ref<BulletSettings> settings, double angle, Vector2 init_position, Node* owner) {
     set_position(init_position);
 
     ttl = settings->get_ttl();
@@ -99,10 +99,10 @@ void Bullet2D::start(Ref<BulletSettings> settings, double angle, Vector2 init_po
     set_texture(settings->get_texture());
 
     if (server->body_get_shape_count(physics_body) == 0) {
-        server->body_add_shape(physics_body, shape);
+        server->body_add_shape(physics_body, settings->get_bullet_shape_rid());
     }
     else {
-        server->body_set_shape(physics_body, 0, shape);
+        server->body_set_shape(physics_body, 0, settings->get_bullet_shape_rid());
     }
 
     set_physics_process(true);

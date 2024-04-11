@@ -6,9 +6,9 @@
 /*                                                 */
 /* Copyright (c) 2024-present MELMON PROJECT.      */
 /*                                                 */
-/* Danmaku Engine is released under the GNU GPL    */
-/* Public Licence v3.0. You should have received a */
-/* copy of the licence with the source code.       */
+/* Danmaku Engine is released under the MIT        */
+/* Licence You should have received a copy of the  */
+/* licence with the source code.                   */
 /*                                                 */
 /* THIS SOFTWARE IS PROVIDED "AS IS" WITH NO       */
 /* WARRANTY OF ANY KIND. FOR DETAILS, CHECK THE    */
@@ -34,8 +34,6 @@ private:
 
     Bullet2D* first_available;  // unused bullet
 
-    RID bullet_shape;
-
     uint32_t current_bullets = 0;
 
 
@@ -60,8 +58,6 @@ public:
     uint32_t get_pool_size() const { return pool_size; }
 
     uint32_t get_current_bullets() { return current_bullets; }
-
-    RID get_bullet_shape() { return bullet_shape; }
 };
 }
 
