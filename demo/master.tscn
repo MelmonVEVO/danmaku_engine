@@ -17,7 +17,7 @@ bullet_hitbox_radius = 4
 script = ExtResource("1_1fxad")
 
 [node name="BulletPool" type="BulletPool" parent="."]
-pool_size = 1000
+pool_size = 8000
 
 [node name="FPSLabel" type="Label" parent="."]
 offset_right = 40.0
@@ -35,7 +35,7 @@ bullet_settings = SubResource("BulletSettings_mcp3f")
 bullet_pool_to_use = NodePath("../BulletPool")
 bullets_per_volley = 30
 spawn_on_start = true
-spawn_rate = 2.0
+spawn_rate = 6.0
 position = Vector2(586, 176)
 
 [node name="Player" parent="." instance=ExtResource("3_cyqag")]

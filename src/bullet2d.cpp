@@ -15,8 +15,6 @@
 /* PROVIDED LICENSE FILE.                          */
 /***************************************************/
 
-
-
 #include <godot_cpp/godot.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/world2d.hpp>
@@ -63,6 +61,7 @@ void Bullet2D::_ready() {
 }
 
 
+// TODO measure performance with tracy or something
 void Bullet2D::_physics_process(double delta) {  // maybe multithread this if performance still takes a hit?
     PhysicsServer2D* server = PhysicsServer2D::get_singleton();
 

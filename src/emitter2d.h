@@ -76,9 +76,9 @@ public:
 
     void _ready() override;
     void _process(double delta) override;
+    PackedStringArray _get_configuration_warnings() const override;
     // void clear_owned_bullets();
-    // void start_spawning();
-    // void do_volley();                 // A volley is a single spawn of a group of bullets.
+    // void do_volley();
 
     
     // Setters and getters. My word!

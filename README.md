@@ -2,10 +2,18 @@
 
 # Danmaku Engine
 
-Danmaku Engine is a plugin for Godot that allows you to create and manipulate performant bullets for your Touhou clone.
-It also comes with an easy to use spawner node that allows you to create all sorts of fun bullet patterns.
+Danmaku Engine is a plugin for Godot that allows you to create and manipulate bullets for your Touhou clone.
+It uses C++ under the bonnet to be as smooth as possible. At the moment the plugin can handle 8000 simultaneous bullets before it starts to hang (though it can always be more performant and I'm always looking for more ways to squeeze more FPS out of this thing).
+
+I've spent time researching, and much more time playing, great SHMUPs such as Touhou, DoDonPachi and Blue Revolver, and I have tried my best to develop this plugin so that you can create amazing bullet patterns at that level.
 
 <!-- TODO put gif of danmaku engine in action here. -->
+
+## Features
+- Bullets! Lots of them!
+- A bullet emitter node.
+- BulletSettings that you can save and reuse.
+- Seeded randomisation to provide capability for a replay system.
 
 ## Setup
 
@@ -13,17 +21,25 @@ To get started, create a `BulletPool` node in your scene and set how many bullet
 
 To spawn bullets, you can either do so by first creating a `BulletSettings` resource, then activating bullets manually as follows:
 ```gdscript
-var bullet: Bullet2D pool.get_bullet()
+var bullet: Bullet2D = pool.get_bullet()
 bullet.start(relevant, parameters, go, here)
 ```
 
 Or you can use the included `Emitter2D` node which handles everything for you!
 
-Once a bullet is emitted, it will have the physics layer that you set it to. Add a hitbox to your enemies/player with the matching collision mask!
+Once a bullet is emitted, it will have the physics layer that you set it to. Add a hitbox to your enemies/player with the matching collision mask, then connect the `body_shape_entered` signal to do whatever you want when something is hit with a bullet.
 
 ## Bugs
 Probably infinite (although countably infinite). However, the distant screams of Godot running this thing is *not* a bug. It's a feature.
 If your game crashes because of this, feel free to let me know, making sure you give me as much juicy detail as possible.
+
+## FAQ
+- Q: Will you be making 3D versions of the nodes?
+    - A: Since this plugin is what I use when developing SHMUPs, it depends on whether or not I make a 3D SHMUP.
+
+
+- Q: Can you recommend me a SHMUP to play?
+    - A: Play Like Dreamer, or any of Outside's other games!
 
 ## Licence
 Copyright (c) 2024-present MELMON PROJECT.

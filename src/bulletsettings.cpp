@@ -56,7 +56,7 @@ void BulletSettings::_bind_methods() {
 }
 
 
-RID BulletSettings::get_bullet_shape_rid() {
+RID BulletSettings::get_bullet_shape_rid() {  // BulletSettings keeps a RID of its hitbox.
     if (bullet_shape.get_id() == 0) {
         PhysicsServer2D* server = PhysicsServer2D::get_singleton();
 
