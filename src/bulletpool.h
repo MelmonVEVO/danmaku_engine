@@ -32,7 +32,7 @@ private:
     uint32_t pool_size = 100;
     Bullet2D* pool = nullptr;
 
-    Bullet2D* first_available;  // unused bullet
+    Bullet2D* first_available;  // Unused bullets
 
     uint32_t current_bullets = 0;
 
@@ -58,6 +58,10 @@ public:
     uint32_t get_pool_size() const { return pool_size; }
 
     uint32_t get_current_bullets() { return current_bullets; }
+
+    // void connect_bullet_clear(Callable method_to_connect_to);
+
+    void kill_em_all();
 };
 }
 

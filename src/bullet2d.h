@@ -41,7 +41,7 @@ private:
     real_t ang_vel = 0.0;
     real_t acceleration = 0.0;
 
-    Bullet2D* next = nullptr;
+    Bullet2D* next = nullptr;  // TODO figure out how unions work
 
 protected:
     static void _bind_methods();

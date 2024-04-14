@@ -46,23 +46,23 @@ private:
     Ref<BulletSettings> settings;
     BulletPool* usable_pool = nullptr;
 
-    // for now only get ring spawner working
+    // Spawning properties
     // SpawnType spawn_type;
-    int32_t bullets_per_volley;
-    //int32_t stack_count;              // Wanna stack bullets?
+    int32_t bullets_per_volley = 1;  // For the ring spawner
+    //int32_t stack_count;
     //real_t time_between_stacks;
-    bool spawn_on_start;
-    real_t spawn_rate;
-    //real_t spawn_offset;              // How far in game units to spawn away from the emitter.
-    //int32_t volley_count;             // How many volleys to do after emitter starts spawning. Infinite if -1.
-    //real_t rotation_rate;             // Rotation rate of the emitter in radians.
+    bool spawn_on_start = false;
+    real_t volley_rate = 2.0;
+    real_t spawn_offset = 0.0;  // How far in game units to spawn away from the emitter.
+    //int32_t volley_count;  // How many volleys to do after emitter starts spawning. Infinite if -1.
+    //real_t rotation_rate_deg;  // Rotation rate of the emitter
     //RotationOption rotation_option;
 
+    // Logic variables
     bool spawning;
     double time_to_wait;
     double current_timer;
     double angle_per_bullet;
-
     //real_t current_added_rotation;
     //int32_t current_volley;
 
@@ -78,7 +78,7 @@ public:
     void _process(double delta) override;
     PackedStringArray _get_configuration_warnings() const override;
     // void clear_owned_bullets();
-    // void do_volley();
+    void do_volley();
 
     
     // Setters and getters. My word!
@@ -88,32 +88,17 @@ public:
     void set_usable_pool(BulletPool* p_usable_pool) { usable_pool = p_usable_pool; };
     BulletPool* get_usable_pool() const { return usable_pool; };
 
-    // void set_spawn_type(SpawnType p_spawn_type);
-    // SpawnType get_spawn_type() const;
-
     void set_bullets_per_volley(int32_t p_bullets_per_volley) { bullets_per_volley = p_bullets_per_volley; };
     int32_t get_bullets_per_volley() const { return bullets_per_volley; };
-
-    // void set_stack_count(int32_t p_stack_count);
-    // int32_t get_stack_count() const;
 
     void set_spawn_on_start(bool p_spawn_on_start) { spawn_on_start = p_spawn_on_start; };
     bool is_spawn_on_start() const { return spawn_on_start; };
 
-    void set_spawn_rate(real_t p_spawn_rate) { spawn_rate = p_spawn_rate; };
-    real_t get_spawn_rate() const { return spawn_rate; };
+    void set_volley_rate(real_t p_volley_rate) { volley_rate = p_volley_rate; };
+    real_t get_volley_rate() const { return volley_rate; };
 
-    // void set_volley_count(int32_t p_volley_count);
-    // int32_t get_volley_count() const;
-
-    // void set_spawn_offset(real_t p_spawn_offset);
-    // real_t get_spawn_offset() const;
-
-    // void set_rotation_rate(real_t p_rotation_rate);
-    // real_t get_rotation_rate() const;
-
-    // void set_rotation_option(RotationOption p_rotation_option);
-    // RotationOption get_rotation_option() const;
+    void set_spawn_offset(real_t p_spawn_offset) { spawn_offset = p_spawn_offset; };
+    real_t get_spawn_offset() const { return spawn_offset; };
 };
 }
 

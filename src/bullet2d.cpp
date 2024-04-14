@@ -61,13 +61,16 @@ void Bullet2D::_ready() {
 }
 
 
-// TODO measure performance with tracy or something
-void Bullet2D::_physics_process(double delta) {  // maybe multithread this if performance still takes a hit?
+// TODO Measure performance with tracy or something
+void Bullet2D::_physics_process(double delta) {  // TODO Maybe multithread this if performance still takes a hit?
     PhysicsServer2D* server = PhysicsServer2D::get_singleton();
 
     if (ang_vel != 0.0) {
-        velocity = velocity.rotated(ang_vel * delta);
+        velocity = velocity.rotated(Math::deg_to_rad(ang_vel) * delta);
     }
+
+    velocity = velocity + (velocity.normalized() * (acceleration * delta));
+
     set_position(get_position() + (velocity * delta));
     server->body_set_state(physics_body, PhysicsServer2D::BODY_STATE_TRANSFORM, get_global_transform());
     ttl = ttl - delta;
@@ -77,7 +80,7 @@ void Bullet2D::_physics_process(double delta) {  // maybe multithread this if pe
 }
 
 
-// Starts the processing of the bullet.
+// FIRE IN THE HOLE
 void Bullet2D::start(Ref<BulletSettings> settings, double angle, Vector2 init_position, Node* owner) {
     set_position(init_position);
 
@@ -91,7 +94,7 @@ void Bullet2D::start(Ref<BulletSettings> settings, double angle, Vector2 init_po
     server->body_set_collision_layer(physics_body, settings->get_phys_layer());
 
     if (owner != nullptr && owner->has_signal("clear_owned_bullets")) {
-        // owner->connect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));
+        // owner->connect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear)); TODO Owned bullet clearing
         current_owner = owner;
     }
 
@@ -120,19 +123,20 @@ void Bullet2D::clear() {
 // This makes the bullet return to the bullet pool and stands by.
 // Mostly used by itself if a bullet times out. clear() may be more appropriate for manually clearing bullets.
 void Bullet2D::standby() {
-    PhysicsServer2D* server = PhysicsServer2D::get_singleton();
+    if (is_physics_processing()) {
+        PhysicsServer2D* server = PhysicsServer2D::get_singleton();
 
-    emit_signal("standby", this);
-    server->body_set_shape_disabled(physics_body, 0, true);
-    set_physics_process(false);
-    hide();
-    if (current_owner != nullptr && current_owner->has_signal("clear_owned_bullets")) {
-        current_owner->disconnect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));
+        emit_signal("standby", this);
+        server->body_set_shape_disabled(physics_body, 0, true);
+        set_physics_process(false);
+        hide();
+        // if (current_owner != nullptr && current_owner->has_signal("clear_owned_bullets")) {
+        //     current_owner->disconnect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));  TODO owned bullet clearing disconnect
+        // }
     }
 }
 
 
-// Cleanup.
 Bullet2D::~Bullet2D() {
     PhysicsServer2D* server = PhysicsServer2D::get_singleton();
     server->free_rid(physics_body);

@@ -10,3 +10,7 @@ extends Node
 func _process(_delta: float) -> void:
 	fps_label.text = "FPS " + str(Engine.get_frames_per_second())
 	bulletcount_label.text = "Bullets " + str(bullet_pool.get_current_bullets())
+
+
+func _on_button_pressed() -> void:
+	bullet_pool.kill_em_all()
