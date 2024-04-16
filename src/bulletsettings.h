@@ -29,12 +29,13 @@ class BulletSettings : public Resource {
 
 private:
     Ref<Texture2D> bullet_texture;
-    real_t init_speed;
-    real_t acceleration;
-    real_t ang_vel;
-    uint32_t phys_layer;
-    real_t ttl;
-    uint32_t radius;
+    bool directed_texture = false;
+    real_t init_speed = 0.0;  // TODO move this to patterns
+    real_t acceleration = 0.0;  // and this
+    real_t ang_vel = 0.0;  // this too
+    uint32_t phys_layer = 0;
+    real_t ttl = 5.0;
+    uint32_t radius = 2;
 
     RID bullet_shape;
 
@@ -44,6 +45,9 @@ protected:
 public:
     void set_texture(Ref<Texture2D> p_texture) { bullet_texture = p_texture; };
     Ref<Texture2D> get_texture() const { return bullet_texture; };
+
+    void set_directed_texture(bool p_directed_texture) { directed_texture = p_directed_texture; };
+    bool is_directed_texture() const { return directed_texture; };
 
     void set_initial_speed(real_t p_initial_speed) { init_speed = p_initial_speed; };
     real_t get_initial_speed() const { return init_speed; };

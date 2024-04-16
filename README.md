@@ -2,8 +2,12 @@
 
 # Danmaku Engine
 
-Danmaku Engine is a plugin for Godot that allows you to create and manipulate bullets for your Touhou clone.
-It uses C++ under the bonnet to be as smooth as possible. At the moment the plugin can handle ~6000 simultaneous bullets before it starts to hang (though it can always be more performant and I'm always looking for more ways to squeeze more FPS out of this thing).
+**DISCLAIMER: This thing isn't completely finished! It might (will) be very buggy!**
+
+Danmaku Engine is a C++ plugin for Godot I write and use to make my SHMUP games.
+It's geared towards my workflow but it may be useful to you too!
+
+At the moment the plugin can handle ~6000 simultaneous bullets before it starts to hang (though it can always be more performant and I'm always looking for more ways to squeeze more FPS out of this thing).
 
 I've spent time researching, and much more time playing, great SHMUPs such as Touhou, DoDonPachi and Blue Revolver, and I have tried my best to develop this plugin so that you can create amazing bullet patterns at that level.
 
@@ -13,7 +17,8 @@ I've spent time researching, and much more time playing, great SHMUPs such as To
 - Bullets! Lots of them!
 - A bullet emitter node.
 - BulletSettings that you can save and reuse.
-- Seeded randomisation for deterministic emitting. #replays
+- BulletPattern resource.
+- (coming soon!) Seeded randomisation for deterministic emitting. #replays
 
 ## Setup
 

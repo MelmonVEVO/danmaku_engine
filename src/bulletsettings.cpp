@@ -28,6 +28,10 @@ void BulletSettings::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_texture", "p_texture"), &BulletSettings::set_texture);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "bullet_texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture2D"), "set_texture", "get_texture");
 
+    ClassDB::bind_method(D_METHOD("is_directed_texture"), &BulletSettings::is_directed_texture);
+    ClassDB::bind_method(D_METHOD("set_directed_texture", "p_directed_texture"), &BulletSettings::set_directed_texture);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "directed_texture"), "set_directed_texture", "is_directed_texture");
+
     ClassDB::bind_method(D_METHOD("get_initial_speed"), &BulletSettings::get_initial_speed);
     ClassDB::bind_method(D_METHOD("set_initial_speed", "p_initial_speed"), &BulletSettings::set_initial_speed);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "initial_speed"), "set_initial_speed", "get_initial_speed");

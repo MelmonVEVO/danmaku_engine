@@ -1,6 +1,7 @@
 extends Node
 
 @onready var bullet_pool: BulletPool = $BulletPool
+@onready var emitter_2d: Emitter2D = $Emitter2D
 
 @onready var fps_label: Label = $FPSLabel
 @onready var bulletcount_label: Label = $BulletcountLabel
@@ -14,3 +15,4 @@ func _process(_delta: float) -> void:
 
 func _on_button_pressed() -> void:
 	bullet_pool.kill_em_all()
+	emitter_2d.start_emitting()

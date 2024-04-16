@@ -82,7 +82,7 @@ void Bullet2D::_physics_process(double delta) {  // TODO Maybe multithread this 
 
 // FIRE IN THE HOLE
 void Bullet2D::start(Ref<BulletSettings> settings, double angle, Vector2 init_position, Node* owner) {
-    set_position(init_position);
+    set_global_position(init_position);
 
     ttl = settings->get_ttl();
     velocity = Vector2(cos(angle), sin(angle)) * settings->get_initial_speed();
@@ -131,7 +131,7 @@ void Bullet2D::standby() {
         set_physics_process(false);
         hide();
         // if (current_owner != nullptr && current_owner->has_signal("clear_owned_bullets")) {
-        //     current_owner->disconnect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));  TODO owned bullet clearing disconnect
+        //     current_owner->disconnect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));
         // }
     }
 }

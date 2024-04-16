@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4ml6l08wdux3"]
+[gd_scene load_steps=5 format=3 uid="uid://c4ml6l08wdux3"]
 
 [ext_resource type="Script" path="res://master.gd" id="1_1fxad"]
 [ext_resource type="PackedScene" uid="uid://bh355c0dlnam3" path="res://player.tscn" id="3_cyqag"]
 [ext_resource type="BulletSettings" uid="uid://lyug5jh43qem" path="res://bullet.tres" id="3_tvc2y"]
+
+[sub_resource type="PointPattern" id="PointPattern_x0jlt"]
 
 [node name="Master" type="Node"]
 script = ExtResource("1_1fxad")
@@ -24,12 +26,15 @@ text = "0"
 [node name="Player" parent="." instance=ExtResource("3_cyqag")]
 position = Vector2(587, 557)
 
-[node name="Emitter2D" type="Emitter2D" parent="." node_paths=PackedStringArray("bullet_pool_to_use")]
+[node name="Emitter2D" type="Emitter2D" parent="." node_paths=PackedStringArray("bullet_pool_to_use", "aimed_towards")]
 bullet_settings = ExtResource("3_tvc2y")
 bullet_pool_to_use = NodePath("../BulletPool")
+bullet_pattern = SubResource("PointPattern_x0jlt")
 spawn_on_start = true
-volley_rate = 4.0
-bullets_per_volley = 30
+volley_rate = 32.0
+aimed_towards = NodePath("../Player")
+rotation_option = 1
+rotation_speed = 80.0
 position = Vector2(582, 122)
 
 [node name="Button" type="Button" parent="."]

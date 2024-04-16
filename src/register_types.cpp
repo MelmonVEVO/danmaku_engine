@@ -4,6 +4,9 @@
 #include "bulletpool.h"
 #include "emitter2d.h"
 #include "bulletsettings.h"
+#include "bulletpattern.h"
+#include "pointpattern.h"
+#include "ringpattern.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -18,6 +21,10 @@ void initialise_danmaku_engine(ModuleInitializationLevel p_level) {
     }
 
     ClassDB::register_class<BulletSettings>();
+    ClassDB::register_class<BulletPattern>();
+    ClassDB::register_class<PointPattern>();
+    ClassDB::register_class<RingPattern>();
+
     ClassDB::register_class<Bullet2D>();
     ClassDB::register_class<BulletPool>();
     ClassDB::register_class<Emitter2D>();
