@@ -17,6 +17,7 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 #include "emitter2d.h"
 
@@ -51,10 +52,6 @@ void Emitter2D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_number_of_volleys"), &Emitter2D::get_number_of_volleys);
     ClassDB::bind_method(D_METHOD("set_number_of_volleys", "p_number_of_volleys"), &Emitter2D::set_number_of_volleys);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "number_of_volleys"), "set_number_of_volleys", "get_number_of_volleys");
-
-    ClassDB::bind_method(D_METHOD("get_seed"), &Emitter2D::get_seed);
-    ClassDB::bind_method(D_METHOD("set_seed", "p_seed"), &Emitter2D::set_seed);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "seed"), "set_seed", "get_seed");
 
     ADD_GROUP("Trajectory", "emitter_trajectory_");
     ClassDB::bind_method(D_METHOD("get_trajectory"), &Emitter2D::get_trajectory);
@@ -116,8 +113,6 @@ void Emitter2D::_ready() {
         current_rotation = Math::deg_to_rad(get_start_rotation());
         if (is_spawn_on_start()) {
             start_emitting();
-        }
-        if ((get_trajectory() == Trajectory::RANDOM || get_rotation_option() == RotationOption::RANDOMISE) && seed > 0) {  // TODO seeded randomisation IN GENERAL
         }
     }
 }
@@ -192,10 +187,20 @@ PackedStringArray Emitter2D::_get_configuration_warnings() const {  // Saving me
 
 void Emitter2D::rotate(double delta) {
     if (get_rotation_option() == NONE) { return; }
-    if (get_rotation_option() == RANDOMISE) { return; }
+
+    double init_r = Math::deg_to_rad(get_start_rotation());
+
+    if (get_rotation_option() == RANDOMISE) {
+        current_rotation = UtilityFunctions::randf_range(init_r, init_r + get_rot_range());
+        return;
+    }
 
     current_rotation += get_rotation_speed() * delta;
-    if (current_rotation > get_rot_range() || current_rotation < -get_rot_range()) {
+
+    if (
+        (get_rot_range() >= 0 && (current_rotation > get_rot_range() + init_r || current_rotation < init_r))  // range is positive (clockwise)
+        || (get_rot_range() < 0 && (current_rotation < get_rot_range() + init_r || current_rotation > init_r))  // range is negative (anticlockwise)
+    ) {
         switch (get_rotation_option()) {
             case CONTINUOUS:
                 if (current_rotation > 0) { current_rotation -= get_rot_range(); }

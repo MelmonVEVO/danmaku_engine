@@ -7,6 +7,10 @@ extends Node
 @onready var bulletcount_label: Label = $BulletcountLabel
 
 
+func _ready() -> void:
+	seed(1337)
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	fps_label.text = "FPS " + str(Engine.get_frames_per_second())

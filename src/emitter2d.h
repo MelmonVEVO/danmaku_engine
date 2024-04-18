@@ -41,8 +41,8 @@ public:
     enum RotationOption {  // The rate the emitter's direction spins
         NONE = 0,  // No rotation
         CONTINUOUS = 1,  // Goes from start to end of the rot_range
-        BOUNCE = 2,  // TODO Bounces between the rot_range range
-        RANDOMISE = 3  // TODO Picks a random direction within the rot_range
+        BOUNCE = 2,  // Bounces between the rot_range range
+        RANDOMISE = 3  // Picks a random direction within the rot_range
     };
 
 private:
@@ -64,7 +64,7 @@ private:
     uint64_t seed = 0;
 
     // =+ Logic variables += //
-    bool spawning;
+    bool spawning = false;
 
     double current_rotation;  // in radians
     double rot_range = 2 * Math_PI;  // in radians
