@@ -22,50 +22,30 @@ using namespace godot;
 
 
 void PointPattern::fire(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation) {
-    Bullet2D* bullet = pool->get_bullet();
-    if (bullet == nullptr) { return; }
-
     Vector2 start_pos = origin + (Vector2(cos(rotation), sin(rotation)) * offset);
 
-    if (bullet != nullptr) {
-        bullet->start(settings, rotation, start_pos);  // TODO ownership
-    }
+    pool->start_bullet(settings, rotation, start_pos);  // TODO ownership
 }
 
 
 void PointPattern::fire_fixed(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation, real_t dir) {
-    Bullet2D* bullet = pool->get_bullet();
-    if (bullet == nullptr) { return; }
-
     Vector2 start_pos = origin + (Vector2(cos(rotation), sin(rotation)) * offset);
 
-    if (bullet != nullptr) {
-        bullet->start(settings, dir, start_pos);
-    }
+    pool->start_bullet(settings, dir, start_pos);
 }
 
 
 void PointPattern::fire_aimed(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation, Vector2 towards) {
-    Bullet2D* bullet = pool->get_bullet();
-    if (bullet == nullptr) { return; }
-
     Vector2 start_pos = origin + (Vector2(cos(rotation), sin(rotation)) * offset);
 
-    if (bullet != nullptr) {
-        bullet->start(settings, (towards - start_pos).angle(), start_pos);
-    }
+    pool->start_bullet(settings, (towards - start_pos).angle(), start_pos);
 }
 
 
 void PointPattern::fire_random(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation) {
-    Bullet2D* bullet = pool->get_bullet();
-    if (bullet == nullptr) { return; }
-
     Vector2 start_pos = origin + (Vector2(cos(rotation), sin(rotation)) * offset);
 
-    if (bullet != nullptr) {
-        bullet->start(settings, UtilityFunctions::randf_range(0, 2*Math_PI), start_pos);
-    }
+    pool->start_bullet(settings, UtilityFunctions::randf_range(0, 2*Math_PI), start_pos);
 }
 
 

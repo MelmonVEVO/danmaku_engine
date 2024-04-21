@@ -16,6 +16,7 @@
 /***************************************************/
 
 #include <godot_cpp/variant/utility_functions.hpp>
+
 #include "ringpattern.h"
 
 using namespace godot;
@@ -35,13 +36,9 @@ void RingPattern::fire(BulletPool* pool, Ref<BulletSettings> settings, Vector2 o
     for (uint32_t i = 0; i < get_bullets_in_ring(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation;
 
-        Bullet2D* bullet = pool->get_bullet();
-
-        if (bullet == nullptr) { return; }
-
         Vector2 start_pos = origin + (Vector2(cos(bullet_angle), sin(bullet_angle)) * offset);
 
-        bullet->start(settings, bullet_angle, start_pos);
+        pool->start_bullet(settings, bullet_angle, start_pos);
     }
 }
 
@@ -52,13 +49,9 @@ void RingPattern::fire_fixed(BulletPool* pool, Ref<BulletSettings> settings, Vec
     for (uint32_t i = 0; i < get_bullets_in_ring(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation;
 
-        Bullet2D* bullet = pool->get_bullet();
-
-        if (bullet == nullptr) { return; }
-
         Vector2 start_pos = origin + (Vector2(cos(bullet_angle), sin(bullet_angle)) * offset);
 
-        bullet->start(settings, dir, start_pos);
+        pool->start_bullet(settings, dir, start_pos);
     }
 }
 
@@ -69,13 +62,9 @@ void RingPattern::fire_aimed(BulletPool* pool, Ref<BulletSettings> settings, Vec
     for (uint32_t i = 0; i < get_bullets_in_ring(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation;
 
-        Bullet2D* bullet = pool->get_bullet();
-
-        if (bullet == nullptr) { return; }
-
         Vector2 start_pos = origin + (Vector2(cos(bullet_angle), sin(bullet_angle)) * offset);
 
-        bullet->start(settings, (towards - start_pos).angle(), start_pos);
+        pool->start_bullet(settings, (towards - start_pos).angle(), start_pos);
     }
 }
 
@@ -86,13 +75,9 @@ void RingPattern::fire_random(BulletPool* pool, Ref<BulletSettings> settings, Ve
     for (uint32_t i = 0; i < get_bullets_in_ring(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation;
 
-        Bullet2D* bullet = pool->get_bullet();
-
-        if (bullet == nullptr) { return; }
-
         Vector2 start_pos = origin + (Vector2(cos(bullet_angle), sin(bullet_angle)) * offset);
 
-        bullet->start(settings, UtilityFunctions::randf_range(0, 2*Math_PI), start_pos);
+        pool->start_bullet(settings, UtilityFunctions::randf_range(0, 2*Math_PI), start_pos);
     }
 }
 

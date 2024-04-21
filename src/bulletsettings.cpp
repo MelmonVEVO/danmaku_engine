@@ -42,11 +42,7 @@ void BulletSettings::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_ang_vel"), &BulletSettings::get_ang_vel);
     ClassDB::bind_method(D_METHOD("set_ang_vel", "p_ang_vel"), &BulletSettings::set_ang_vel);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "angular_velocity", PROPERTY_HINT_RANGE, "-360,360"), "set_ang_vel", "get_ang_vel");
-
-    ClassDB::bind_method(D_METHOD("get_phys_layer"), &BulletSettings::get_phys_layer);
-    ClassDB::bind_method(D_METHOD("set_phys_layer", "phys_layer"), &BulletSettings::set_phys_layer);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "physics_layer", PROPERTY_HINT_LAYERS_2D_PHYSICS), "set_phys_layer", "get_phys_layer");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "angular_velocity"), "set_ang_vel", "get_ang_vel");
 
     ClassDB::bind_method(D_METHOD("get_ttl"), &BulletSettings::get_ttl);
     ClassDB::bind_method(D_METHOD("set_ttl", "p_ttl"), &BulletSettings::set_ttl);
@@ -54,13 +50,21 @@ void BulletSettings::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_radius"), &BulletSettings::get_radius);
     ClassDB::bind_method(D_METHOD("set_radius", "p_radius"), &BulletSettings::set_radius);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "bullet_hitbox_radius"), "set_radius", "get_radius"); 
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "bullet_hitbox_radius"), "set_radius", "get_radius");
+
+    ClassDB::bind_method(D_METHOD("get_max_speed"), &BulletSettings::get_max_speed);
+    ClassDB::bind_method(D_METHOD("set_max_speed", "p_max_speed"), &BulletSettings::set_max_speed);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_speed"), "set_max_speed", "get_max_speed");
+
+    ClassDB::bind_method(D_METHOD("get_min_speed"), &BulletSettings::get_min_speed);
+    ClassDB::bind_method(D_METHOD("set_min_speed", "p_min_speed"), &BulletSettings::set_min_speed);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "min_speed"), "set_min_speed", "get_min_speed");
 
     ClassDB::bind_method(D_METHOD("get_bullet_shape_rid"), &BulletSettings::get_bullet_shape_rid);
 }
 
 
-RID BulletSettings::get_bullet_shape_rid() {  // BulletSettings keeps a RID of its hitbox.
+RID BulletSettings::get_bullet_shape_rid() {
     if (bullet_shape.get_id() == 0) {
         PhysicsServer2D* server = PhysicsServer2D::get_singleton();
 
@@ -68,4 +72,15 @@ RID BulletSettings::get_bullet_shape_rid() {  // BulletSettings keeps a RID of i
         server->shape_set_data(bullet_shape, get_radius());
     }
     return bullet_shape;
+}
+
+
+BulletSettings::BulletSettings() {
+}
+
+
+BulletSettings::~BulletSettings() {
+    if (bullet_shape.get_id() != 0) {
+        PhysicsServer2D::get_singleton()->free_rid(bullet_shape);
+    }
 }

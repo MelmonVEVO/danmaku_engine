@@ -7,9 +7,9 @@
 Danmaku Engine is a C++ plugin for Godot I write and use to make my SHMUP games.
 It's geared towards my workflow but it may be useful to you too!
 
-At the moment the plugin can handle ~6000 simultaneous bullets before it starts to hang (though it can always be more performant and I'm always looking for more ways to squeeze more FPS out of this thing).
+At the moment the plugin can handle ~7000 simultaneous bullets before it starts to hang. I'm looking for more ways to make it performant though!
 
-I've spent time researching, and much more time playing, great SHMUPs such as Touhou, DoDonPachi and Blue Revolver, and I have tried my best to develop this plugin so that you can create amazing bullet patterns at that level.
+I've spent time researching, and much more time playing, great SHMUPs such as Touhou and DoDonPachi, and I have tried my best to develop this plugin so that you can create amazing bullet patterns at that level.
 
 <!-- TODO put gif of danmaku engine in action here. -->
 
@@ -28,8 +28,7 @@ To spawn bullets, you can either do so by first creating a `BulletSettings` reso
 
 Alternatively, you can do it manually:
 ```gdscript
-var bullet: Bullet2D = pool.get_bullet()
-bullet.start(relevant, parameters, go, here)
+bulletpool.start_bullet(relevant, parameters, go, here)
 ```
 
 Once a bullet is emitted, it will have the physics layer that you set it to. Add a hitbox to your enemies/player with the matching collision mask, then connect the `body_shape_entered` signal to do whatever you want when something is hit with a bullet.

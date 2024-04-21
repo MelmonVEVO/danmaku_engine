@@ -18,49 +18,73 @@
 #ifndef BULLET_POOL_H
 #define BULLET_POOL_H
 
-#include <godot_cpp/classes/node.hpp>
-#include "bullet2d.h"
+#include <godot_cpp/classes/node2d.hpp>
+
+#include "bulletsettings.h"
 
 
 namespace godot {
 
-class BulletPool : public Node {
-    GDCLASS(BulletPool, Node)
+struct Bullet {
+    RID physics_body;
+    Bullet* next;
 
+    // Current bullet information
+    bool active = false;
+    double ttl = 0.0;
+    Node* current_owner = nullptr;
+    Vector2 position;
+    Vector2 velocity;
+    real_t ang_vel = 0.0;
+    real_t acceleration = 0.0;
+    real_t max_vel = INFINITY;
+    real_t min_vel = -INFINITY;
+    Ref<Texture2D> texture;
+    bool directed_texture = false;
+};
+
+class BulletPool : public Node2D {
+    GDCLASS(BulletPool, Node2D)
 
 private:
-    uint32_t pool_size = 100;
-    Bullet2D* pool = nullptr;
+    Bullet* pool = nullptr;
+    Bullet* available_bullets = nullptr;
+    uint32_t current_bullet_count = 0;
+    std::unordered_map<uint64_t, uint32_t> rid_to_pool_pos_map;  // If it's hacky and you know it, clap your hands!! *clap clap*
 
-    Bullet2D* first_available;  // Unused bullets
-
-    uint32_t current_bullets = 0;
-
+    uint32_t phys_layer = 0;
+    uint32_t pool_size = 1000;
 
 protected:
     static void _bind_methods();
-    void set_current_bullets(uint32_t pool_size) { current_bullets = pool_size; }
-    void increment_current_bullets() { current_bullets++; }
-    void decrement_current_bullets() { current_bullets--; }
+    void set_current_bullets(uint32_t pool_size) { current_bullet_count = pool_size; }
+    void increment_current_bullet_count() { current_bullet_count++; }
+    void decrement_current_bullet_count() { current_bullet_count--; }
+    void reset_current_bullet_count() { current_bullet_count = 0; }
+    void disable_bullet(Bullet* bullet);
 
+    void process_bullets(double delta);
+    void initialise_pool();
 
 public:
     BulletPool();
     ~BulletPool();
 
-    void initialise_pool();
-    void _ready() override;
-    Bullet2D* get_bullet();
-    void return_bullet(Bullet2D* bullet);
     
-    void set_pool_size(uint32_t p_pool_size) { pool_size = p_pool_size; }
+    void _ready() override;
+    void _physics_process(double delta) override;
+    void _draw() override;
+    
+    void start_bullet(Ref<BulletSettings> settings, double angle, Vector2 init_position, Node* owner=nullptr);
+    void remove_bullet_by_rid(RID body);
+    
+    void set_pool_size(uint32_t p_pool_size) { pool_size = p_pool_size; };
+    uint32_t get_pool_size() const { return pool_size; };
 
-    uint32_t get_pool_size() const { return pool_size; }
+    void set_phys_layer(uint32_t p_phys_layer) { phys_layer = p_phys_layer; };
+    uint32_t get_phys_layer() const { return phys_layer; };
 
-    uint32_t get_current_bullets() { return current_bullets; }
-
-    // void connect_bullet_clear(Callable method_to_connect_to);
-
+    uint32_t get_current_bullets() { return current_bullet_count; };
     void kill_em_all();
 };
 }
