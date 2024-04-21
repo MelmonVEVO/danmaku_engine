@@ -24,7 +24,6 @@ android.release.arm64 = "res://bin/danmaku_engine.android.template_release.arm64
 
 [icons]
 
-Bullet2D = "res://bin/bullet2d.svg"
 BulletPool = "res://bin/bulletpool.svg"
 Emitter2D = "res://bin/emitter2d.svg"
 BulletSettings = "res://bin/bulletsettings.svg"

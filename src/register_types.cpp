@@ -1,6 +1,5 @@
 #include "register_types.h"
 
-#include "bullet2d.h"
 #include "bulletpool.h"
 #include "emitter2d.h"
 #include "bulletsettings.h"
@@ -25,7 +24,6 @@ void initialise_danmaku_engine(ModuleInitializationLevel p_level) {
     ClassDB::register_class<PointPattern>();
     ClassDB::register_class<RingPattern>();
 
-    ClassDB::register_class<Bullet2D>();
     ClassDB::register_class<BulletPool>();
     ClassDB::register_class<Emitter2D>();
 }
@@ -38,7 +36,6 @@ void uninitialise_danmaku_engine(ModuleInitializationLevel p_level) {
 }
 
 extern "C" {
-// Initialisation.
 GDExtensionBool GDE_EXPORT danmaku_engine_init(GDExtensionInterfaceGetProcAddress p_get_proc_address, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization) {
 	godot::GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
 

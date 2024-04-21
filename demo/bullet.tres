@@ -1,9 +1,9 @@
 [gd_resource type="BulletSettings" load_steps=2 format=3 uid="uid://lyug5jh43qem"]
 
-[ext_resource type="Texture2D" uid="uid://o4x6bg707ll7" path="res://sprites/platformPack_item001.png" id="1_al5s0"]
+[ext_resource type="Texture2D" uid="uid://o4x6bg707ll7" path="res://sprites/platformPack_item001.png" id="1_j12dy"]
 
 [resource]
-bullet_texture = ExtResource("1_al5s0")
-initial_speed = 600.0
-physics_layer = 1
+bullet_texture = ExtResource("1_j12dy")
+initial_speed = 400.0
+ttl = 8.0
 bullet_hitbox_radius = 4

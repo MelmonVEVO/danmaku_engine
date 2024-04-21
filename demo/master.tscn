@@ -13,7 +13,8 @@ bullets_in_ring = 16
 script = ExtResource("1_1fxad")
 
 [node name="BulletPool" type="BulletPool" parent="."]
-pool_size = 6000
+pool_size = 9000
+physics_layer = 1
 
 [node name="FPSLabel" type="Label" parent="."]
 offset_right = 40.0
@@ -33,7 +34,6 @@ position = Vector2(587, 557)
 bullet_settings = ExtResource("3_tvc2y")
 bullet_pool_to_use = NodePath("../BulletPool")
 bullet_pattern = SubResource("RingPattern_bv4cm")
-spawn_on_start = true
 volley_rate = 120.0
 trajectory = 3
 aimed_towards = NodePath("../Player")
@@ -44,13 +44,13 @@ position = Vector2(582, 122)
 bullet_settings = ExtResource("3_tvc2y")
 bullet_pool_to_use = NodePath("../BulletPool")
 bullet_pattern = SubResource("PointPattern_x0jlt")
+spawn_on_start = true
 volley_rate = 28.0
 aimed_towards = NodePath("../Player")
 rotation_option = 2
 start_rotation = 180.0
 rotation_range = -180.0
 rotation_speed = -250.0
-visible = false
 position = Vector2(582, 122)
 
 [node name="Button" type="Button" parent="."]

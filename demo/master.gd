@@ -19,4 +19,4 @@ func _process(_delta: float) -> void:
 
 func _on_button_pressed() -> void:
 	bullet_pool.kill_em_all()
-	emitter_2d.start_emitting()
+	# emitter_2d.start_emitting()

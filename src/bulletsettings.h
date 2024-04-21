@@ -30,12 +30,13 @@ class BulletSettings : public Resource {
 private:
     Ref<Texture2D> bullet_texture;
     bool directed_texture = false;
-    real_t init_speed = 0.0;  // TODO move this to patterns
-    real_t acceleration = 0.0;  // and this
-    real_t ang_vel = 0.0;  // this too
-    uint32_t phys_layer = 0;
+    real_t init_speed = 0.0;
+    real_t acceleration = 0.0;
+    real_t ang_vel = 0.0;
     real_t ttl = 5.0;
     uint32_t radius = 2;
+    real_t max_speed = INFINITY;  // TODO max and min speed
+    real_t min_speed = -INFINITY;
 
     RID bullet_shape;
 
@@ -43,6 +44,9 @@ protected:
     static void _bind_methods();
 
 public:
+    BulletSettings();
+    ~BulletSettings();
+
     void set_texture(Ref<Texture2D> p_texture) { bullet_texture = p_texture; };
     Ref<Texture2D> get_texture() const { return bullet_texture; };
 
@@ -58,14 +62,17 @@ public:
     void set_ang_vel(real_t p_ang_vel) { ang_vel = p_ang_vel; };
     real_t get_ang_vel() const { return ang_vel; };
 
-    void set_phys_layer(uint32_t p_phys_layer) { phys_layer = p_phys_layer; };
-    uint32_t get_phys_layer() const { return phys_layer; };
-
     void set_ttl(real_t p_ttl) { ttl = p_ttl; };
     real_t get_ttl() const { return ttl; };
 
     void set_radius(uint32_t p_radius) { radius = p_radius; };
     uint32_t get_radius() const { return radius; };
+
+    void set_max_speed(real_t p_max_speed) { max_speed = p_max_speed; };
+    real_t get_max_speed() const { return max_speed; };
+    
+    void set_min_speed(real_t p_min_speed) { min_speed = p_min_speed; };
+    real_t get_min_speed() const { return min_speed; };
 
     RID get_bullet_shape_rid();
 };
