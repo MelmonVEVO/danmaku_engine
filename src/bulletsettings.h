@@ -37,6 +37,7 @@ private:
     uint32_t radius = 2;
     real_t max_speed = INFINITY;  // TODO max and min speed
     real_t min_speed = -INFINITY;
+    uint32_t phys_mask = 0;
 
     RID bullet_shape;
 
@@ -73,6 +74,9 @@ public:
     
     void set_min_speed(real_t p_min_speed) { min_speed = p_min_speed; };
     real_t get_min_speed() const { return min_speed; };
+
+    void set_phys_mask(uint32_t p_phys_mask) { phys_mask = p_phys_mask; };
+    uint32_t get_phys_mask() const { return phys_mask; };
 
     RID get_bullet_shape_rid();
 };

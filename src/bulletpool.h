@@ -19,6 +19,8 @@
 #define BULLET_POOL_H
 
 #include <godot_cpp/classes/node2d.hpp>
+#include <godot_cpp/classes/physics_shape_query_parameters2d.hpp>
+#include <godot_cpp/classes/physics_direct_space_state2d.hpp>
 
 #include "bulletsettings.h"
 
@@ -26,13 +28,13 @@
 namespace godot {
 
 struct Bullet {
-    RID physics_body;
+    Ref<PhysicsShapeQueryParameters2D> query = memnew(PhysicsShapeQueryParameters2D);
     Bullet* next;
 
     // Current bullet information
     bool active = false;
     double ttl = 0.0;
-    Node* current_owner = nullptr;
+    // TODO Node* current_owner = nullptr;
     Vector2 position;
     Vector2 velocity;
     real_t ang_vel = 0.0;
@@ -50,9 +52,8 @@ private:
     Bullet* pool = nullptr;
     Bullet* available_bullets = nullptr;
     uint32_t current_bullet_count = 0;
-    std::unordered_map<uint64_t, uint32_t> rid_to_pool_pos_map;  // If it's hacky and you know it, clap your hands!! *clap clap*
-
-    uint32_t phys_layer = 0;
+    PhysicsDirectSpaceState2D* space_state;
+    
     uint32_t pool_size = 1000;
 
 protected:
@@ -76,13 +77,9 @@ public:
     void _draw() override;
     
     void start_bullet(Ref<BulletSettings> settings, double angle, Vector2 init_position, Node* owner=nullptr);
-    void remove_bullet_by_rid(RID body);
     
     void set_pool_size(uint32_t p_pool_size) { pool_size = p_pool_size; };
     uint32_t get_pool_size() const { return pool_size; };
-
-    void set_phys_layer(uint32_t p_phys_layer) { phys_layer = p_phys_layer; };
-    uint32_t get_phys_layer() const { return phys_layer; };
 
     uint32_t get_current_bullets() { return current_bullet_count; };
     void kill_em_all();

@@ -15,7 +15,6 @@ script = ExtResource("1_1fxad")
 
 [node name="BulletPool" type="BulletPool" parent="."]
 pool_size = 6000
-physics_layer = 1
 
 [node name="FPSLabel" type="Label" parent="."]
 offset_right = 40.0
@@ -58,5 +57,5 @@ offset_bottom = 104.0
 text = "clear
 "
 
-[connection signal="hit" from="Player" to="." method="_on_player_hit"]
+[connection signal="collision" from="BulletPool" to="Player" method="_on_bullet_pool_collision"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

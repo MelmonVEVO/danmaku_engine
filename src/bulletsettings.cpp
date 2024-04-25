@@ -60,6 +60,10 @@ void BulletSettings::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_min_speed", "p_min_speed"), &BulletSettings::set_min_speed);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "min_speed"), "set_min_speed", "get_min_speed");
 
+    ClassDB::bind_method(D_METHOD("get_phys_mask"), &BulletSettings::get_phys_mask);
+    ClassDB::bind_method(D_METHOD("set_phys_mask", "phys_mask"), &BulletSettings::set_phys_mask);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "physics_mask", PROPERTY_HINT_LAYERS_2D_PHYSICS), "set_phys_mask", "get_phys_mask");
+
     ClassDB::bind_method(D_METHOD("get_bullet_shape_rid"), &BulletSettings::get_bullet_shape_rid);
 }
 

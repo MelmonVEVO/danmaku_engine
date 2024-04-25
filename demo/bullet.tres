@@ -5,3 +5,4 @@
 [resource]
 bullet_texture = ExtResource("1_j12dy")
 initial_speed = 300.0
+physics_mask = 1

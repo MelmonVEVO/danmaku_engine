@@ -31,15 +31,11 @@ void BulletPool::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_current_bullets"), &BulletPool::get_current_bullets);
     ClassDB::bind_method(D_METHOD("start_bullet", "settings", "angle", "init_position", "owner"), &BulletPool::start_bullet);
     ClassDB::bind_method(D_METHOD("kill_em_all"), &BulletPool::kill_em_all);
-    ClassDB::bind_method(D_METHOD("remove_bullet_by_rid", "rid"), &BulletPool::remove_bullet_by_rid);
 
     ClassDB::bind_method(D_METHOD("get_pool_size"), &BulletPool::get_pool_size);
 	ClassDB::bind_method(D_METHOD("set_pool_size", "p_pool_size"), &BulletPool::set_pool_size);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "pool_size", PROPERTY_HINT_RANGE, "100,20000,100"), "set_pool_size", "get_pool_size");
-
-    ClassDB::bind_method(D_METHOD("get_phys_layer"), &BulletPool::get_phys_layer);
-    ClassDB::bind_method(D_METHOD("set_phys_layer", "phys_layer"), &BulletPool::set_phys_layer);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "physics_layer", PROPERTY_HINT_LAYERS_2D_PHYSICS), "set_phys_layer", "get_phys_layer");
+    ADD_SIGNAL(MethodInfo("collision", PropertyInfo(Variant::DICTIONARY, "collider")));
 }
 
 
@@ -50,10 +46,6 @@ BulletPool::BulletPool() {
 BulletPool::~BulletPool() {
     if (pool == nullptr) { return; }
 
-    PhysicsServer2D* server = PhysicsServer2D::get_singleton();
-    for (uint32_t i = 0; i < get_pool_size(); i++) {
-        server->free_rid(pool[i].physics_body);
-    }
     delete[] pool;
 }
 
@@ -78,6 +70,7 @@ void BulletPool::initialise_pool() {
     pool = new Bullet[get_pool_size()];
 
     available_bullets = pool;
+    space_state = get_world_2d()->get_direct_space_state();
 
     PhysicsServer2D* server = PhysicsServer2D::get_singleton();
     RID space = get_world_2d()->get_space();
@@ -85,19 +78,7 @@ void BulletPool::initialise_pool() {
     Transform2D transform = Transform2D();
 
     for (int32_t i = 0; i < get_pool_size(); i++) {
-        pool[i].physics_body = server->body_create();
-
-        server->body_set_mode(pool[i].physics_body, PhysicsServer2D::BODY_MODE_KINEMATIC);
-        server->body_set_space(pool[i].physics_body, space);
-
-        server->body_set_collision_mask(pool[i].physics_body, 0);
-        server->body_set_collision_layer(pool[i].physics_body, get_phys_layer());
-
-        transform.set_origin(Vector2(0, 0));
-
-        server->body_set_state(pool[i].physics_body, PhysicsServer2D::BODY_STATE_TRANSFORM, transform);
-
-        rid_to_pool_pos_map[pool[i].physics_body.get_id()] = i;
+        pool[i].query->set_collide_with_areas(true);
 
         pool[i].next = &pool[i+1];
     }
@@ -128,21 +109,13 @@ void BulletPool::start_bullet(Ref<BulletSettings> settings, double angle, Vector
     bullet->texture = settings->get_texture();
     bullet->directed_texture = settings->is_directed_texture();
 
-    PhysicsServer2D* server = PhysicsServer2D::get_singleton();
-
     // if (owner != nullptr && owner->has_signal("clear_owned_bullets")) {
-    //     // owner->connect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear)); TODO Owned bullet clearing
+    //     // owner->connect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));
     //     bullet->current_owner = owner;
     // }
 
-    if (server->body_get_shape_count(bullet->physics_body) == 0) {
-        server->body_add_shape(bullet->physics_body, settings->get_bullet_shape_rid());
-    }
-    else {
-        server->body_set_shape(bullet->physics_body, 0, settings->get_bullet_shape_rid());
-    }
-
-    server->body_set_shape_disabled(bullet->physics_body, 0, false);
+    bullet->query->set_shape_rid(settings->get_bullet_shape_rid());
+    bullet->query->set_collision_mask(settings->get_phys_mask());
 
     increment_current_bullet_count();
 
@@ -155,29 +128,31 @@ void BulletPool::process_bullets(double delta) {  // TODO Maybe multithread this
     if (current_bullet_count == 0) { return; }
 
     Bullet* bullet;
-
     Transform2D transform = Transform2D();
-    PhysicsServer2D* server = PhysicsServer2D::get_singleton();
 
     for (uint32_t i = 0; i < get_pool_size(); i++) {  // TODO Iterates over all bullets for now until I think of a good way to implement a "active bullet" array thingy
         bullet = &pool[i];
         if (!bullet->active) { continue; }
 
+        // Physics value calculation
         if (bullet->ang_vel != 0.0) {
             bullet->velocity = bullet->velocity.rotated(bullet->ang_vel * delta);
         }
-
         bullet->velocity = bullet->velocity + (bullet->velocity.normalized() * (bullet->acceleration * delta));
-
         bullet->position = bullet->position + (bullet->velocity * delta);
-
         transform.set_origin(bullet->position);
-        server->body_set_state(bullet->physics_body, PhysicsServer2D::BODY_STATE_TRANSFORM, transform);
+        bullet->query->set_transform(transform);
+
+        // Colliding
+        // TypedArray<Dictionary> result = space_state->intersect_shape(bullet->query, 1);
+        // if (!result.is_empty()) {
+        //     emit_signal("collision", result[0]);
+        //     disable_bullet(bullet);
+        //     return;
+        // }
 
         bullet->ttl = bullet->ttl - delta;
-
         if (bullet->ttl < 0.0) { disable_bullet(bullet); }
-        // else if (get_world_2d()->get_direct_space_state()->intersect_shape()) {}
     }
     queue_redraw();
 }
@@ -198,18 +173,9 @@ void BulletPool::kill_em_all() {
 
 void BulletPool::disable_bullet(Bullet* bullet) {
     decrement_current_bullet_count();
-
-    PhysicsServer2D::get_singleton()->call_deferred("body_set_shape_disabled", bullet->physics_body, 0, true);
     bullet->next = available_bullets;
     available_bullets = bullet;
     bullet->active = false;
-}
-
-
-void BulletPool::remove_bullet_by_rid(RID body) {
-    if (rid_to_pool_pos_map.find(body.get_id()) == rid_to_pool_pos_map.end()) { return; }
-
-    disable_bullet(&pool[rid_to_pool_pos_map[body.get_id()]]);
 }
 
 
