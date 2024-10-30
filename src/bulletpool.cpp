@@ -35,6 +35,7 @@ void BulletPool::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_pool_size"), &BulletPool::get_pool_size);
 	ClassDB::bind_method(D_METHOD("set_pool_size", "p_pool_size"), &BulletPool::set_pool_size);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "pool_size", PROPERTY_HINT_RANGE, "100,20000,100"), "set_pool_size", "get_pool_size");
+    
     ADD_SIGNAL(MethodInfo("collision", PropertyInfo(Variant::DICTIONARY, "collider")));
 }
 
@@ -67,7 +68,7 @@ void BulletPool::_physics_process(double delta) {
 
 
 void BulletPool::initialise_pool() {
-    pool = new Bullet[get_pool_size()];
+    pool = memnew_arr(Bullet, get_pool_size());
 
     available_bullets = pool;
     space_state = get_world_2d()->get_direct_space_state();
@@ -80,18 +81,10 @@ void BulletPool::initialise_pool() {
     for (int32_t i = 0; i < get_pool_size(); i++) {
         pool[i].query->set_collide_with_areas(true);
 
-        pool[i].next = &pool[i+1];
+        pool[i].next = &pool[i+1];  // I don't like how the last iteration accesses unallocated memory but hey, It Works
     }
-    pool[get_pool_size() - 1].next = nullptr;  // I don't like how the last iteration accesses unallocated memory but hey, It Works
+    pool[get_pool_size() - 1].next = nullptr;
 }
-
-
-// void BulletPool::connect_bullet_clear(Callable method_to_connect_to) {  // TODO Hack this another day
-//     for (uint32_t i = 0; i < get_pool_size(); i++) {
-//         callable_mp(method_to_connect_to.get_object, method_to_connect_to)
-//         pool[i].connect("clear", method_to_connect_to);
-//     }
-// }
 
 
 // FIRE IN THE HOLE
@@ -100,19 +93,12 @@ void BulletPool::start_bullet(Ref<BulletSettings> settings, double angle, Vector
 
     Bullet* bullet = available_bullets;
 
-    bullet->active = true;
     bullet->ttl = settings->get_ttl();
     bullet->velocity = Vector2(cos(angle), sin(angle)) * settings->get_initial_speed();
     bullet->ang_vel = Math::deg_to_rad(settings->get_ang_vel());
     bullet->acceleration = settings->get_acceleration();
     bullet->position = init_position;
     bullet->texture = settings->get_texture();
-    bullet->directed_texture = settings->is_directed_texture();
-
-    // if (owner != nullptr && owner->has_signal("clear_owned_bullets")) {
-    //     // owner->connect("clear_owned_bullets", callable_mp(this, &Bullet2D::clear));
-    //     bullet->current_owner = owner;
-    // }
 
     bullet->query->set_shape_rid(settings->get_bullet_shape_rid());
     bullet->query->set_collision_mask(settings->get_phys_mask());
@@ -120,6 +106,7 @@ void BulletPool::start_bullet(Ref<BulletSettings> settings, double angle, Vector
     increment_current_bullet_count();
 
     available_bullets = bullet->next;
+    active_bullets.push_back(*bullet);
 }
 
 
@@ -130,10 +117,9 @@ void BulletPool::process_bullets(double delta) {  // TODO Maybe multithread this
     Bullet* bullet;
     Transform2D transform = Transform2D();
 
-    for (uint32_t i = 0; i < get_pool_size(); i++) {  // TODO Iterates over all bullets for now until I think of a good way to implement a "active bullet" array thingy
-        bullet = &pool[i];
-        if (!bullet->active) { continue; }
-
+    for (auto & bul : active_bullets) {
+        Bullet* bullet = &bul;
+        
         // Physics value calculation
         if (bullet->ang_vel != 0.0) {
             bullet->velocity = bullet->velocity.rotated(bullet->ang_vel * delta);
@@ -144,12 +130,17 @@ void BulletPool::process_bullets(double delta) {  // TODO Maybe multithread this
         bullet->query->set_transform(transform);
 
         // Colliding
-        // TypedArray<Dictionary> result = space_state->intersect_shape(bullet->query, 1);
-        // if (!result.is_empty()) {
-        //     emit_signal("collision", result[0]);
-        //     disable_bullet(bullet);
-        //     return;
-        // }
+        TypedArray<Dictionary> result = space_state->intersect_shape(bullet->query, 1);
+        if (!result.is_empty()) {
+            emit_signal("collision", result[0]);
+            bool tmp = false;
+            if (result[0].get_named("collider", tmp).has_method("hit")) {
+                result[0].get_named("collider", tmp).call("hit");
+            }
+            disable_bullet(bullet);
+            active_bullets.
+            return;
+        }
 
         bullet->ttl = bullet->ttl - delta;
         if (bullet->ttl < 0.0) { disable_bullet(bullet); }
@@ -159,15 +150,11 @@ void BulletPool::process_bullets(double delta) {  // TODO Maybe multithread this
 
 
 void BulletPool::kill_em_all() {
-    Bullet* bullet;
-
-    for (uint32_t i = 0; i < get_pool_size(); i++) {
-        bullet = &pool[i];
-        if (!bullet->active) { continue; }
-
-        disable_bullet(bullet);
+    for (auto & bul : active_bullets) {
+        disable_bullet(&bul);
     }
     reset_current_bullet_count();
+    active_bullets.clear();
 }
 
 
@@ -175,7 +162,6 @@ void BulletPool::disable_bullet(Bullet* bullet) {
     decrement_current_bullet_count();
     bullet->next = available_bullets;
     available_bullets = bullet;
-    bullet->active = false;
 }
 
 

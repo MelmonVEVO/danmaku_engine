@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Danmaku Engine Demo"
-config/tags=PackedStringArray("mid_development", "plugins")
+config/tags=PackedStringArray("hiatus", "mid_development", "plugins")
 run/main_scene="res://master.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)

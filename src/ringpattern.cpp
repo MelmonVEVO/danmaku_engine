@@ -31,8 +31,6 @@ void RingPattern::_bind_methods() {
 
 
 void RingPattern::fire(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation) {
-    double angle_per_bullet = (2.0 * Math_PI) / ((double) get_bullets_in_ring());
-
     for (uint32_t i = 0; i < get_bullets_in_ring(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation;
 
@@ -44,8 +42,6 @@ void RingPattern::fire(BulletPool* pool, Ref<BulletSettings> settings, Vector2 o
 
 
 void RingPattern::fire_fixed(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation, real_t dir) {
-    double angle_per_bullet = (2.0 * Math_PI) / ((double) get_bullets_in_ring());
-
     for (uint32_t i = 0; i < get_bullets_in_ring(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation;
 
@@ -57,8 +53,6 @@ void RingPattern::fire_fixed(BulletPool* pool, Ref<BulletSettings> settings, Vec
 
 
 void RingPattern::fire_aimed(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation, Vector2 towards) {
-    double angle_per_bullet = (2.0 * Math_PI) / ((double) get_bullets_in_ring());
-
     for (uint32_t i = 0; i < get_bullets_in_ring(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation;
 
@@ -70,8 +64,6 @@ void RingPattern::fire_aimed(BulletPool* pool, Ref<BulletSettings> settings, Vec
 
 
 void RingPattern::fire_random(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation) {
-    double angle_per_bullet = (2.0 * Math_PI) / ((double) get_bullets_in_ring());
-
     for (uint32_t i = 0; i < get_bullets_in_ring(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation;
 

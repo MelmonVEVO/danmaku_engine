@@ -54,6 +54,7 @@ private:
     Emitter2D::Trajectory trajectory = DEFAULT;
     bool spawn_on_start = false;
     real_t volley_rate = 2.0;
+    real_t offset_time = 0.0;
     int32_t number_of_volleys = -1;
     real_t spawn_offset = 0.0;  // How far in game units to spawn away from the emitter.
     Node2D* towards = nullptr;
@@ -149,6 +150,9 @@ public:
 
     void set_pattern(Ref<BulletPattern> p_pattern) { pattern = p_pattern; };
     Ref<BulletPattern> get_pattern() const { return pattern; };
+
+    void set_offset_time(real_t p_offset_time) { offset_time = p_offset_time; };
+    real_t get_offset_time() const { return offset_time; };
 
     void start_emitting();
 

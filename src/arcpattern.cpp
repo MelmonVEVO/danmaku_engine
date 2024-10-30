@@ -34,7 +34,7 @@ void ArcPattern::_bind_methods() {
 
 
 void ArcPattern::fire(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation) {
-    double angle_per_bullet = get_arc_angle() / ((double) get_bullets_in_arc() - 1.0);
+    double angle_per_bullet = _get_angle_per_bullet();
 
     for (uint32_t i = 0; i < get_bullets_in_arc(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation - (get_arc_angle() * 0.5);
@@ -47,7 +47,7 @@ void ArcPattern::fire(BulletPool* pool, Ref<BulletSettings> settings, Vector2 or
 
 
 void ArcPattern::fire_fixed(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation, real_t dir) {
-    double angle_per_bullet = get_arc_angle() / ((double) get_bullets_in_arc() - 1.0);
+    double angle_per_bullet = _get_angle_per_bullet();
 
     for (uint32_t i = 0; i < get_bullets_in_arc(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation - (get_arc_angle() * 0.5);
@@ -60,7 +60,7 @@ void ArcPattern::fire_fixed(BulletPool* pool, Ref<BulletSettings> settings, Vect
 
 
 void ArcPattern::fire_aimed(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation, Vector2 towards) {
-    double angle_per_bullet = get_arc_angle() / ((double) get_bullets_in_arc() - 1.0);
+    double angle_per_bullet = _get_angle_per_bullet();
 
     for (uint32_t i = 0; i < get_bullets_in_arc(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation - (get_arc_angle() * 0.5);
@@ -73,7 +73,7 @@ void ArcPattern::fire_aimed(BulletPool* pool, Ref<BulletSettings> settings, Vect
 
 
 void ArcPattern::fire_random(BulletPool* pool, Ref<BulletSettings> settings, Vector2 origin, real_t offset, real_t rotation) {
-    double angle_per_bullet = get_arc_angle() / ((double) get_bullets_in_arc() - 1.0);
+    double angle_per_bullet = _get_angle_per_bullet();
 
     for (uint32_t i = 0; i < get_bullets_in_arc(); i++) {
         double bullet_angle = angle_per_bullet * i + rotation - (get_arc_angle() * 0.5);
@@ -82,6 +82,11 @@ void ArcPattern::fire_random(BulletPool* pool, Ref<BulletSettings> settings, Vec
 
         pool->start_bullet(settings, UtilityFunctions::randf_range(0, 2*Math_PI), start_pos);
     }
+}
+
+
+double ArcPattern::_get_angle_per_bullet() {
+    return arc_angle_rad / (float(bullets_in_arc) - 1.0);
 }
 
 

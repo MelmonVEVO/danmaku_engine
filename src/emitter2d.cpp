@@ -29,6 +29,14 @@ void Emitter2D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("stop_emitting"), &Emitter2D::stop_emitting);
 
     ADD_GROUP("Core", "emitter_core_");
+    ClassDB::bind_method(D_METHOD("is_spawn_on_start"), &Emitter2D::is_spawn_on_start);
+    ClassDB::bind_method(D_METHOD("set_spawn_on_start", "p_spawn_on_start"), &Emitter2D::set_spawn_on_start);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "spawn_on_start"), "set_spawn_on_start", "is_spawn_on_start");
+
+    ClassDB::bind_method(D_METHOD("get_offset_time"), &Emitter2D::get_offset_time);
+    ClassDB::bind_method(D_METHOD("set_offset_time", "p_offset_time"), &Emitter2D::set_offset_time);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "offset_time"), "set_offset_time", "get_offset_time");
+
     ClassDB::bind_method(D_METHOD("get_settings"), &Emitter2D::get_settings);
     ClassDB::bind_method(D_METHOD("set_settings", "p_settings"), &Emitter2D::set_settings);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "bullet_settings", PROPERTY_HINT_RESOURCE_TYPE, "BulletSettings"), "set_settings", "get_settings");
@@ -40,10 +48,6 @@ void Emitter2D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_pattern"), &Emitter2D::get_pattern);
     ClassDB::bind_method(D_METHOD("set_pattern", "p_pattern"), &Emitter2D::set_pattern);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "bullet_pattern", PROPERTY_HINT_RESOURCE_TYPE, "BulletPattern"), "set_pattern", "get_pattern");
-   
-    ClassDB::bind_method(D_METHOD("is_spawn_on_start"), &Emitter2D::is_spawn_on_start);
-    ClassDB::bind_method(D_METHOD("set_spawn_on_start", "p_spawn_on_start"), &Emitter2D::set_spawn_on_start);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "spawn_on_start"), "set_spawn_on_start", "is_spawn_on_start");
 
     ClassDB::bind_method(D_METHOD("get_volley_rate"), &Emitter2D::get_volley_rate);
     ClassDB::bind_method(D_METHOD("set_volley_rate", "p_volley_rate"), &Emitter2D::set_volley_rate);
@@ -83,9 +87,8 @@ void Emitter2D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_spawn_offset", "p_spawn_offset"), &Emitter2D::set_spawn_offset);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "spawn_offset"), "set_spawn_offset", "get_spawn_offset");
 
-    ADD_SIGNAL(MethodInfo("clear"));
     ADD_SIGNAL(MethodInfo("volley"));
-    ADD_SIGNAL(MethodInfo("finished_spawning"));
+    ADD_SIGNAL(MethodInfo("finished_emitting"));
 
     BIND_ENUM_CONSTANT(Trajectory::DEFAULT);
     BIND_ENUM_CONSTANT(Trajectory::FIXED);

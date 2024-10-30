@@ -31,6 +31,7 @@ private:
     real_t arc_angle_deg = 30.0;
 
     double arc_angle_rad = Math_PI / 6.0;
+    double _get_angle_per_bullet();
 
 protected:
     static void _bind_methods();

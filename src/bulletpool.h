@@ -32,9 +32,7 @@ struct Bullet {
     Bullet* next;
 
     // Current bullet information
-    bool active = false;
     double ttl = 0.0;
-    // TODO Node* current_owner = nullptr;
     Vector2 position;
     Vector2 velocity;
     real_t ang_vel = 0.0;
@@ -42,7 +40,6 @@ struct Bullet {
     real_t max_vel = INFINITY;
     real_t min_vel = -INFINITY;
     Ref<Texture2D> texture;
-    bool directed_texture = false;
 };
 
 class BulletPool : public Node2D {
@@ -50,8 +47,10 @@ class BulletPool : public Node2D {
 
 private:
     Bullet* pool = nullptr;
-    Bullet* available_bullets = nullptr;
+    Bullet* available_bullets;
+    std::vector<Bullet> active_bullets;
     uint32_t current_bullet_count = 0;
+
     PhysicsDirectSpaceState2D* space_state;
     
     uint32_t pool_size = 1000;
